@@ -3,15 +3,19 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
+
+  const confirmationFailed = searchParams.get('error') === 'confirmation_failed'
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -34,6 +38,12 @@ export default function LoginPage() {
     <div className="bg-[#141416] border border-white/[0.08] rounded-2xl p-8">
       <h1 className="text-xl font-semibold text-[#F5F5F2] mb-1">Welcome back</h1>
       <p className="text-sm text-[rgba(245,245,242,0.55)] mb-6">Log in to your Clinidex account</p>
+
+      {confirmationFailed && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-3.5 py-2.5 text-sm text-red-400 mb-4">
+          The confirmation link has expired or is invalid. Please sign up again or contact support.
+        </div>
+      )}
 
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
@@ -91,5 +101,13 @@ export default function LoginPage() {
         </Link>
       </p>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="bg-[#141416] border border-white/[0.08] rounded-2xl p-8 text-center text-sm text-[rgba(245,245,242,0.35)]">Loading…</div>}>
+      <LoginForm />
+    </Suspense>
   )
 }
