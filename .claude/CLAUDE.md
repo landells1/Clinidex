@@ -87,7 +87,7 @@ Never blur these in UI. Always label distinctly.
 | `audit_log` | `user_id`, `action`, `metadata`, `created_at` — service role inserts only, 1-year auto-purge |
 | `custom_competency_themes` | User-defined themes; deletion cascades to `interview_themes[]` arrays |
 | `referrals` | `referrer_id`, `referred_id`, `status`, `reward_granted_at` |
-| `entry_templates` | Curated (~9 trimmed) + user templates |
+| `templates` | Curated (~9 trimmed) + user templates; `user_id IS NULL` = curated |
 | `notifications` | In-app secondary log of email-sent notifications |
 
 ## RLS Policy
