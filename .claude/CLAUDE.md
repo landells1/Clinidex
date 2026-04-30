@@ -29,6 +29,7 @@ Clerkfolio is a UK medical portfolio tracker spanning medical school → foundat
 - **RLS on every table** keyed on `auth.uid() = user_id`.
 - **Soft deletes only** — `deleted_at` filtered in app code, not RLS.
 - **Auto-push to GitHub** after every task.
+- **Cron routes**: every `app/api/cron/*` handler must call `validateCronSecret(req)` from `lib/cron.ts` before any service-role work.
 
 ## Tech Stack
 - **Next.js 14 App Router** — server components by default, `'use client'` only where needed
